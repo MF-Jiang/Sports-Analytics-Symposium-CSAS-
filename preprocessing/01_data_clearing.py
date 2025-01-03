@@ -7,7 +7,7 @@ df = pl.read_ipc(ad, use_pyarrow = True)
 # Discard features or invalid (only one value) features
 columns_to_drop = ['spin_dir', 'spin_rate_deprecated','break_angle_deprecated', 'break_length_deprecated',
                   'tfs_deprecated', 'tfs_zulu_deprecated', 'umpire','game_type','game_year', 'fielder_2_1',
-                   'pitcher_1']
+                   'pitcher_1','pitch_name']
 
 df = df.drop(columns_to_drop)
 pdf = df.to_pandas()

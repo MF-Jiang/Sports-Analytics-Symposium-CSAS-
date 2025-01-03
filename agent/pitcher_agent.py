@@ -5,93 +5,50 @@ class pitcher_agent:
         self.file_path = file_path
         self.data = pd.read_csv(self.file_path)
         self.id = self.data['pitcher'].iloc[0]
+        self.basic_df = self.set_basic_performance()
+        self.display_basic_info()
 
-        # Belief:
-        # Self ability performance
-        # release speed
-        self.release_speed_min = self.data['release_speed'].min()
-        self.release_speed_max = self.data['release_speed'].max()
-        self.release_speed_mean = self.data['release_speed'].mean()
-        self.release_speed_mode = self.data['release_speed'].mode().iloc[0] if not self.data[
-            'release_speed'].mode().empty else None
-        self.release_speed_std = self.data['release_speed'].std()
+    def set_basic_performance(self):
+        # Initialize a dictionary to store all statistics
+        stats_dict = {}
 
-        # release pos
-        self.release_pos_x_min = self.data['release_pos_x'].min()
-        self.release_pos_x_max = self.data['release_pos_x'].max()
-        self.release_pos_x_mean = self.data['release_pos_x'].mean()
-        self.release_pos_x_mode = self.data['release_pos_x'].mode().iloc[0] if not self.data[
-            'release_pos_x'].mode().empty else None
-        self.release_pos_x_std = self.data['release_pos_x'].std()
+        # Helper function to add stats for a given variable
+        def add_stats(variable_name):
+            stats_dict[f"{variable_name}_min"] = self.data[variable_name].min()
+            stats_dict[f"{variable_name}_max"] = self.data[variable_name].max()
+            stats_dict[f"{variable_name}_mean"] = self.data[variable_name].mean()
+            stats_dict[f"{variable_name}_mode"] = self.data[variable_name].mode().iloc[0] if not self.data[
+                variable_name].mode().empty else None
+            stats_dict[f"{variable_name}_std"] = self.data[variable_name].std()
 
-        self.release_pos_y_min = self.data['release_pos_y'].min()
-        self.release_pos_y_max = self.data['release_pos_y'].max()
-        self.release_pos_y_mean = self.data['release_pos_y'].mean()
-        self.release_pos_y_mode = self.data['release_pos_y'].mode().iloc[0] if not self.data[
-            'release_pos_y'].mode().empty else None
-        self.release_pos_y_std = self.data['release_pos_y'].std()
+        # Add stats for each variable
+        for var in ['release_speed', 'release_pos_x', 'release_pos_y', 'release_pos_z',
+                    'pfx_x', 'pfx_z', 'vx0', 'vy0', 'vz0', 'ax', 'ay', 'az',
+                    'effective_speed', 'release_spin_rate', 'release_extension', 'plate_x', 'plate_z']:
+            add_stats(var)
 
+        # Categorical stats
+        stats_dict['p_throws_L'] = (self.data['p_throws'] == 'L').mean()
+        stats_dict['p_throws_R'] = (self.data['p_throws'] == 'R').mean()
+        stats_dict['type_B'] = (self.data['type'] == 'B').mean()
+        stats_dict['type_S'] = (self.data['type'] == 'S').mean()
+        stats_dict['type_X'] = (self.data['type'] == 'X').mean()
 
-        self.release_pos_z_min = self.data['release_pos_z'].min()
-        self.release_pos_z_max = self.data['release_pos_z'].max()
-        self.release_pos_z_mean = self.data['release_pos_z'].mean()
-        self.release_pos_z_mode = self.data['release_pos_z'].mode().iloc[0] if not self.data[
-            'release_pos_z'].mode().empty else None
-        self.release_pos_z_std = self.data['release_pos_z'].std()
+        # Pitch type stats
+        pitch_types = ['CH', 'CS', 'CU', 'EP', 'FA', 'FC', 'FF', 'FO', 'FS', 'KC', 'KN', 'PO', 'SI', 'SL', 'ST', 'SV']
+        for pitch in pitch_types:
+            stats_dict[f"pitch_type_{pitch}"] = (self.data['pitch_type'] == pitch).mean()
 
-        # Throw hand
-        self.p_throws_L = (self.data['p_throws'] == 'L').mean()
-        self.p_throws_R = (self.data['p_throws'] == 'R').mean()
+        # Convert dictionary to DataFrame
+        stats_df = pd.DataFrame([stats_dict])
 
-        # Type
-        self.type_B = (self.data['type'] == 'B').mean()
-        self.type_S = (self.data['type'] == 'S').mean()
-        self.type_X = (self.data['type'] == 'X').mean()
-
-
+        return stats_df
 
     def display_basic_info(self):
-        print("Pitcher Agent Information")
-        print("Pitcher ID: " + str(self.id))
-        print("=" * 30)
-        print(f"File Path: {self.file_path}")
-        print("\nRelease Speed Statistics:")
-        print(f"  Min: {self.release_speed_min}")
-        print(f"  Max: {self.release_speed_max}")
-        print(f"  Mean: {self.release_speed_mean}")
-        print(f"  Mode: {self.release_speed_mode}")
-        print(f"  Std Dev: {self.release_speed_std}")
+        print(self.basic_df)
 
-        print("\nRelease Position X Statistics:")
-        print(f"  Min: {self.release_pos_x_min}")
-        print(f"  Max: {self.release_pos_x_max}")
-        print(f"  Mean: {self.release_pos_x_mean}")
-        print(f"  Mode: {self.release_pos_x_mode}")
-        print(f"  Std Dev: {self.release_pos_x_std}")
-
-        print("\nRelease Position Y Statistics:")
-        print(f"  Min: {self.release_pos_y_min}")
-        print(f"  Max: {self.release_pos_y_max}")
-        print(f"  Mean: {self.release_pos_y_mean}")
-        print(f"  Mode: {self.release_pos_y_mode}")
-        print(f"  Std Dev: {self.release_pos_y_std}")
-
-        print("\nRelease Position Z Statistics:")
-        print(f"  Min: {self.release_pos_z_min}")
-        print(f"  Max: {self.release_pos_z_max}")
-        print(f"  Mean: {self.release_pos_z_mean}")
-        print(f"  Mode: {self.release_pos_z_mode}")
-        print(f"  Std Dev: {self.release_pos_z_std}")
-
-        print("\nThrow Hand Proportions:")
-        print(f"  Left-handed (L): {self.p_throws_L:.2%}")
-        print(f"  Right-handed (R): {self.p_throws_R:.2%}")
-
-        print("\nThrow Type Proportions:")
-        print(f"  Type B: {self.type_B:.2%}")
-        print(f"  Type S: {self.type_S:.2%}")
-        print(f"  Type X: {self.type_X:.2%}")
+    def get_basic_df(self):
+        return self.basic_df
 
 # test
 pitcher_agent = pitcher_agent("../data/pitcher_data/434378.csv")
-pitcher_agent.display_basic_info()
