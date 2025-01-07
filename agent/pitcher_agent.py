@@ -39,7 +39,8 @@ class PitcherAgent:
         # Add stats for each variable
         for var in ['release_speed', 'release_pos_x', 'release_pos_y', 'release_pos_z',
                     'pfx_x', 'pfx_z', 'vx0', 'vy0', 'vz0', 'ax', 'ay', 'az',
-                    'effective_speed', 'release_spin_rate', 'release_extension', 'plate_x', 'plate_z']:
+                    'effective_speed', 'release_spin_rate', 'release_extension', 'plate_x',
+                    'plate_z']:
             add_stats(var)
 
         # Categorical stats

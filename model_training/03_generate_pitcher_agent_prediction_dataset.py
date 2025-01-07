@@ -26,6 +26,8 @@ def generate_agents_from_csv(folder_path):
 
             # Create a pitcher_agent instance
             # print(file_path)
+            # if i==3:
+            #     break
             print("Creating the "+ str(i) +" Pitcher Agent instance")
             agent_instance = PitcherAgent(file_path)
 
@@ -98,7 +100,7 @@ columns_to_keep = [
     "B_pitch_type_PO", "B_pitch_type_SI", "B_pitch_type_SL", "B_pitch_type_ST",
     "B_pitch_type_SV", "balls", "strikes", "on_3b", "on_2b", "on_1b", "outs_when_up",
     "inning", "inning_topbot", "home_score", "away_score", "at_bat_number",
-    "pitch_number", "game_pk", "delta_run_exp", "stand", "bb_type", "pitcher"
+    "pitch_number", "game_pk", "delta_run_exp", "stand", "pitcher"
 ]
 
 filtered_combined_df = final_combined_df[columns_to_keep]

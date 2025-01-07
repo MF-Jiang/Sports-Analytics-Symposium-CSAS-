@@ -23,12 +23,12 @@ def encode_column(column):
 
 
 data['pitch_type'], pitch_type_mapping = encode_column(data['pitch_type'])
-data['bb_type'], bb_type_mapping = encode_column(data['bb_type'])
+# data['bb_type'], bb_type_mapping = encode_column(data['bb_type'])
 data['stand'], stand_mapping = encode_column(data['stand'])
 data['inning_topbot'], inning_topbot_mapping = encode_column(data['inning_topbot'])
 
 print("Pitch Type Mapping:", pitch_type_mapping)
-print("BB Type Mapping:", bb_type_mapping)
+# print("BB Type Mapping:", bb_type_mapping)
 print("Stand Mapping:", stand_mapping)
 print("Inning Topbot Mapping:", inning_topbot_mapping)
 
