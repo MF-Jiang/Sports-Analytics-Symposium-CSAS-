@@ -14,7 +14,6 @@ from sklearn.metrics import confusion_matrix, cohen_kappa_score, mean_squared_er
 from sklearn.metrics import make_scorer
 from catboost import CatBoostClassifier
 
-# df = pd.read_excel('../data/pitcher_prediction_dataset/pitcher_prediction_dataset_V4.xlsx')
 df = pd.read_csv('../data/batter_prediction_dataset/batter_prediction_dataset_V4.csv', low_memory=False)
 print("Finished Loading Data")
 # df = df[~df['bb_type'].isin([15, 16])]
@@ -39,10 +38,10 @@ cols_to_convert = [
     "prev_batter_type_5"
 ]
 
-
 for col in cols_to_convert:
-    df[col] = df[col].str.extract('([0-9.-]+)', expand=False)
-    df[col] = df[col].astype(float)
+    if df[col].map(type).eq(str).any():
+        df[col] = df[col].str.extract('([0-9.-]+)', expand=False)
+        df[col] = df[col].astype(float)
 df['prev_delta_run_exp_1'] = df['prev_delta_run_exp_1'].fillna(0)
 df['prev_delta_run_exp_2'] = df['prev_delta_run_exp_2'].fillna(0)
 df['prev_delta_run_exp_3'] = df['prev_delta_run_exp_3'].fillna(0)
@@ -55,7 +54,6 @@ df = df.drop(columns=['batter', 'game_pk', 'delta_run_exp'])
 
 X = df.drop(columns=['bb_type'])
 y = df['bb_type']
-# print(y.sort_values())
 
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
@@ -63,13 +61,6 @@ print("Finished standardizing data")
 
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42, stratify=y)
 print("Finished Splitting data")
-
-# param_grid = {
-#     'iterations': [100, 200],
-#     'depth': [4, 6, 8],
-#     'learning_rate': [0.01, 0.1],
-# }
-
 
 param_grid = {
     'hidden_layer_sizes': [(50,), (100,), (50, 50)],
@@ -79,7 +70,7 @@ param_grid = {
     'max_iter': [200, 500, 1000],
 }
 
-pca_components_list = [30,50,70,90, None]
+pca_components_list = [30,50, None]
 pca_accuracies = []
 best_accuracy = 0
 best_model = None
@@ -114,6 +105,9 @@ os.makedirs('../model', exist_ok=True)
 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 model_filename = f"../model/best_mlp_batter_agent_prediction_model_{timestamp}.joblib"
 
+print(best_pca_components)
+pca = PCA(n_components=best_pca_components)
+pca.fit_transform(X_train)
 joblib.dump({
     'model': best_model,
     'pca': pca if best_pca_components is not None else None,
@@ -126,21 +120,15 @@ print(f"Model saved to {model_filename}")
 components, accuracies = zip(*pca_accuracies)
 components = ['None' if c is None else str(c) for c in components]
 
-model_folder = os.path.join('..', 'model')
-file_path = os.path.join(model_folder, model_filename)
-
-saved_model = joblib.load(file_path)
-loaded_model = saved_model['model']
-loaded_pca = saved_model['pca']
-
-if loaded_pca is not None:
-    X_test_pca = loaded_pca.transform(X_test)
-else:
-    X_test_pca = X_test
-
-y_pred_loaded = loaded_model.predict(X_test_pca)
-loaded_accuracy = accuracy_score(y_test, y_pred_loaded)
-print(f"Accuracy of loaded model: {loaded_accuracy:.4f}")
+plt.figure(figsize=(10, 6))
+plt.bar(components, accuracies, color='skyblue')
+plt.xlabel('PCA Components')
+plt.ylabel('Accuracy')
+plt.title('PCA Components vs Model Accuracy')
+plt.ylim(0, 1)
+plt.xticks(rotation=45)
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.show()
 
 model_folder = os.path.join('..', 'model')
 file_path = os.path.join(model_folder, model_filename)
@@ -157,6 +145,19 @@ else:
 y_pred_loaded = loaded_model.predict(X_test_pca)
 loaded_accuracy = accuracy_score(y_test, y_pred_loaded)
 print(f"Accuracy of loaded model: {loaded_accuracy:.4f}")
+
+import numpy as np
+
+coefs = best_model.coefs_[0]  # First layer weights
+feature_importance = np.mean(np.abs(coefs), axis=1)
+
+features = X.columns if best_pca_components is None else [f'PC{i+1}' for i in range(best_pca_components)]
+plt.figure(figsize=(12, 6))
+plt.barh(features, feature_importance, color='coral')
+plt.xlabel('Weight Magnitude')
+plt.title('Feature Importance Based on Weight Magnitude (MLP)')
+plt.grid(axis='x', linestyle='--', alpha=0.7)
+plt.show()
 
 
 param_grid = {
@@ -169,7 +170,7 @@ param_grid = {
     # 'grow_policy': ['SymmetricTree', 'Depthwise', 'Lossguide'],
 }
 
-pca_components_list = [30,50,70,90, None]
+pca_components_list = [30,50,None]
 pca_accuracies = []
 best_accuracy = 0
 best_model = None
@@ -198,9 +199,6 @@ for n_components in pca_components_list:
         best_model = grid_search.best_estimator_
         best_pca_components = n_components
 
-
-
-# os.makedirs('saved_models', exist_ok=True)
 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 model_filename = f"../model/best_catboost_batter_agent_prediction_model_{timestamp}.joblib"
 model_folder = os.path.join('..', 'model')
@@ -209,6 +207,9 @@ os.makedirs(model_folder, exist_ok=True)
 model_filename = f"best_catboost_batter_agent_prediction_model_{timestamp}.joblib"
 file_path = os.path.join(model_folder, model_filename)
 
+print(best_pca_components)
+pca = PCA(n_components=best_pca_components)
+pca.fit_transform(X_train)
 joblib.dump({
     'model': best_model,
     'pca': pca if best_pca_components is not None else None,
@@ -231,6 +232,7 @@ plt.xticks(rotation=45)
 plt.grid(axis='y', linestyle='--', alpha=0.7)
 plt.show()
 
+
 feature_importances = best_model.feature_importances_
 
 if best_pca_components is None:
@@ -247,3 +249,17 @@ plt.show()
 
 
 print(f"Best accuracy: {best_accuracy:.4f} with PCA components: {best_pca_components}")
+
+
+saved_model = joblib.load(file_path)
+loaded_model = saved_model['model']
+loaded_pca = saved_model['pca']
+
+if loaded_pca is not None:
+    X_test_pca = loaded_pca.transform(X_test)
+else:
+    X_test_pca = X_test
+
+y_pred_loaded = loaded_model.predict(X_test_pca)
+loaded_accuracy = accuracy_score(y_test, y_pred_loaded)
+print(f"Accuracy of loaded model: {loaded_accuracy:.4f}")
