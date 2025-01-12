@@ -29,8 +29,10 @@ def generate_agents_from_csv(folder_path):
             # if i==3:
             #     break
             print("Creating the "+ str(i) +" Pitcher Agent instance")
-            agent_instance = PitcherAgent(file_path)
-
+            try:
+                agent_instance = PitcherAgent(file_path)
+            except:
+                continue
             # Use the file name (without extension) as the key
             base_name = os.path.splitext(file_name)[0]
             agents[base_name] = agent_instance
@@ -100,7 +102,12 @@ columns_to_keep = [
     "B_pitch_type_PO", "B_pitch_type_SI", "B_pitch_type_SL", "B_pitch_type_ST",
     "B_pitch_type_SV", "balls", "strikes", "on_3b", "on_2b", "on_1b", "outs_when_up",
     "inning", "inning_topbot", "home_score", "away_score", "at_bat_number",
-    "pitch_number", "game_pk", "delta_run_exp", "stand", "pitcher"
+    "pitch_number", "game_pk", "delta_pitcher_run_exp", "stand", "pitcher",
+    'api_break_z_with_gravity_level', 'api_break_x_arm_level', 'api_break_x_batter_in_level',
+    'arm_angle_level','B_api_break_z_with_gravity_level', 'B_api_break_x_arm_level', 'B_api_break_x_batter_in_level',
+    'B_arm_angle_level','if_fielding_alignment','of_fielding_alignment',
+    'home_score_diff', 'home_win_exp', 'age_pit', 'n_thruorder_pitcher', 'n_priorpa_thisgame_player_at_bat',
+    'age_bat', 'pitcher_days_since_prev_game'
 ]
 
 filtered_combined_df = final_combined_df[columns_to_keep]

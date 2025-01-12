@@ -27,11 +27,15 @@ data['bb_type'], bb_type_mapping = encode_column(data['bb_type'])
 data['p_throws'], p_throw_mapping = encode_column(data['p_throws'])
 data['stand'], stand_mapping = encode_column(data['stand'])
 data['inning_topbot'], inning_topbot_mapping = encode_column(data['inning_topbot'])
+data['if_fielding_alignment'], if_fielding_alignment_mapping = encode_column(data['if_fielding_alignment'])
+data['of_fielding_alignment'], of_fielding_alignment_mapping = encode_column(data['of_fielding_alignment'])
 
 print("Pitch Type Mapping:", pitch_type_mapping)
 print("BB Type Mapping:", bb_type_mapping)
 print("Stand Mapping:", stand_mapping)
 print("Inning Topbot Mapping:", inning_topbot_mapping)
+print("IF Fielding Alignment Mapping:", if_fielding_alignment_mapping)
+print("OF Fielding Alignment Mapping:", of_fielding_alignment_mapping)
 
 required_columns = ['on_1b', 'on_2b', 'on_3b']
 for column in required_columns:
@@ -55,7 +59,7 @@ print(missing_values[missing_values > 0])
 
 for i in range(1, 6):
     data[f'prev_batter_type_{i}'] = 0
-    data[f'prev_delta_run_exp_{i}'] = 0.0
+    data[f'prev_bat_win_exp_{i}'] = 0.0
 data.to_csv("../data/batter_prediction_dataset/batter_prediction_dataset_V3.csv", index=False)
 
 # def add_previous_pitches(group):

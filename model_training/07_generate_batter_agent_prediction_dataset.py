@@ -27,15 +27,14 @@ def generate_agents_from_csv(folder_path):
 
             # Create a pitcher_agent instance
             # print(file_path)
-            if file_name == '543518.csv' or file_name == '592325.csv' or file_name == '622491.csv'\
-                    or file_name == '676679.csv' or file_name=='676896.csv':
-                continue
             # if i==3:
             #     break
             print("Creating the "+ str(i) +" Batter Agent instance")
             print(file_name)
-            agent_instance = BatterAgent(file_path)
-
+            try:
+                agent_instance = BatterAgent(file_path)
+            except:
+                continue
             # Use the file name (without extension) as the key
             base_name = os.path.splitext(file_name)[0]
             agents[base_name] = agent_instance
@@ -95,13 +94,16 @@ columns_to_keep = [
     "plate_z", "p_throws",
     "balls", "strikes", "on_3b", "on_2b", "on_1b", "outs_when_up",
     "inning", "inning_topbot", "home_score", "away_score", "at_bat_number",
-    "pitch_number", "game_pk", "delta_run_exp",
+    "pitch_number", "game_pk", "bat_win_exp",
     'zone_level', 'hc_x_level', 'hc_y_level', 'hit_distance_sc_level', 'estimated_ba_using_speedangle_level',
     'babip_value_level', 'iso_value_level','bat_speed_level', 'swing_length_level','stand',
     'P_bb_type_fly_ball','P_bb_type_ground_ball',
     'P_bb_type_line_drive','P_bb_type_popup',
     'P_bb_type_other','P_launch_speed_angle_0','P_launch_speed_angle_1','P_launch_speed_angle_2','P_launch_speed_angle_3',
-    'P_launch_speed_angle_4', 'P_launch_speed_angle_5', 'P_launch_speed_angle_6','bb_type','batter'
+    'P_launch_speed_angle_4', 'P_launch_speed_angle_5', 'P_launch_speed_angle_6','bb_type','batter',
+    'estimated_slg_using_speedangle_level','P_estimated_slg_using_speedangle_level','if_fielding_alignment','of_fielding_alignment',
+    'home_score_diff', 'home_win_exp', 'age_pit', 'n_thruorder_pitcher', 'n_priorpa_thisgame_player_at_bat',
+    'age_bat', 'batter_days_since_prev_game'
 ]
 
 filtered_combined_df = final_combined_df[columns_to_keep]

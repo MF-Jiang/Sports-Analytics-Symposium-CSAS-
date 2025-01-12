@@ -31,7 +31,7 @@ class BatterAgent:
                                                                  self.data[variable_name].min(), self.data[variable_name].max(),
                                                                std)
         for var in ['zone', 'hc_x', 'hc_y', 'hit_distance_sc', 'estimated_ba_using_speedangle',
-                    'babip_value', 'iso_value','bat_speed', 'swing_length']:
+                    'babip_value', 'iso_value','bat_speed', 'swing_length','estimated_slg_using_speedangle']:
             add_stats(var)
 
         # stats_dict['stand_L'] = (self.data['stand'] == 'L').mean()
@@ -82,7 +82,7 @@ class BatterAgent:
 
             # Add stats for numeric variables
             for var in ['zone', 'hc_x', 'hc_y', 'hit_distance_sc', 'estimated_ba_using_speedangle',
-                    'babip_value', 'iso_value','bat_speed', 'swing_length']:
+                    'babip_value', 'iso_value','bat_speed', 'swing_length','estimated_slg_using_speedangle']:
                 stats_dict.update(add_stats(group, var))
 
             # stats_dict['P_stand_L'] = (self.data['stand'] == 'L').mean()

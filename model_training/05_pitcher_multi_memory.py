@@ -10,10 +10,10 @@ def add_previous_pitches(group):
         for i in range(1, 6):
             if len(prev_rows) >= i:
                 group_data.loc[idx, f'prev_pitch_type_{i}'] = prev_rows.iloc[-i]['pitch_type']
-                group_data.loc[idx, f'prev_delta_run_exp_{i}'] = prev_rows.iloc[-i]['delta_run_exp']
+                group_data.loc[idx, f'prev_delta_pitcher_run_exp_{i}'] = prev_rows.iloc[-i]['delta_pitcher_run_exp']
             else:
                 group_data.loc[idx, f'prev_pitch_type_{i}'] = 0
-                group_data.loc[idx, f'prev_delta_run_exp_{i}'] = 0.0
+                group_data.loc[idx, f'prev_delta_pitcher_run_exp_{i}'] = 0.0
     print(group_data)
     return group_data
 
@@ -43,3 +43,7 @@ if __name__ == '__main__':
 
     print("Columns with missing values:")
     print(missing_values[missing_values > 0])
+
+
+
+

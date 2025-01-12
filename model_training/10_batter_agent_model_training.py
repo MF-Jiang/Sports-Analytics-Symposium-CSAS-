@@ -18,38 +18,34 @@ df = pd.read_csv('../data/batter_prediction_dataset/batter_prediction_dataset_V4
 print("Finished Loading Data")
 # df = df[~df['bb_type'].isin([15, 16])]
 cols_to_convert = [
-    "pitch_type", "release_speed", "release_pos_x", "release_pos_y", "release_pos_z",
-    "pfx_x", "pfx_z", "vx0", "vy0", "vz0", "ax", "ay", "az", "effective_speed",
-    "release_spin_rate", "release_extension", "plate_x", "plate_z", "p_throws",
-    "balls", "strikes", "on_3b", "on_2b", "on_1b", "outs_when_up", "inning",
-    "inning_topbot", "home_score", "away_score", "at_bat_number", "pitch_number",
-    "game_pk", "delta_run_exp", "zone_level", "hc_x_level", "hc_y_level",
-    "hit_distance_sc_level", "estimated_ba_using_speedangle_level",
-    "babip_value_level", "iso_value_level", "bat_speed_level", "swing_length_level",
-    "stand", "P_bb_type_fly_ball", "P_bb_type_ground_ball", "P_bb_type_line_drive",
-    "P_bb_type_popup", "P_bb_type_other", "P_launch_speed_angle_0",
-    "P_launch_speed_angle_1", "P_launch_speed_angle_2", "P_launch_speed_angle_3",
-    "P_launch_speed_angle_4", "P_launch_speed_angle_5", "P_launch_speed_angle_6",
-    "bb_type", "batter", "prev_pitch_type_1", "prev_delta_run_exp_1",
-    "prev_pitch_type_2", "prev_delta_run_exp_2", "prev_pitch_type_3",
-    "prev_delta_run_exp_3", "prev_pitch_type_4", "prev_delta_run_exp_4",
-    "prev_pitch_type_5", "prev_delta_run_exp_5", "prev_batter_type_1",
-    "prev_batter_type_2", "prev_batter_type_3", "prev_batter_type_4",
-    "prev_batter_type_5"
+    'pitch_type', 'release_speed', 'release_pos_x', 'release_pos_y', 'release_pos_z', 'pfx_x', 'pfx_z', 'vx0',
+    'vy0', 'vz0', 'ax', 'ay', 'az', 'effective_speed', 'release_spin_rate', 'release_extension', 'plate_x',
+    'plate_z', 'p_throws', 'balls', 'strikes', 'on_3b', 'on_2b', 'on_1b', 'outs_when_up', 'inning',
+    'inning_topbot', 'home_score', 'away_score', 'at_bat_number', 'pitch_number',
+    'zone_level', 'hc_x_level', 'hc_y_level', 'hit_distance_sc_level', 'estimated_ba_using_speedangle_level',
+    'babip_value_level', 'iso_value_level', 'bat_speed_level', 'swing_length_level', 'stand', 'P_bb_type_fly_ball',
+    'P_bb_type_ground_ball', 'P_bb_type_line_drive', 'P_bb_type_popup', 'P_bb_type_other',
+    'P_launch_speed_angle_0', 'P_launch_speed_angle_1', 'P_launch_speed_angle_2', 'P_launch_speed_angle_3',
+    'P_launch_speed_angle_4', 'P_launch_speed_angle_5', 'P_launch_speed_angle_6', 'bb_type',
+    'estimated_slg_using_speedangle_level', 'P_estimated_slg_using_speedangle_level', 'if_fielding_alignment',
+    'of_fielding_alignment', 'home_score_diff', 'home_win_exp', 'age_pit', 'n_thruorder_pitcher',
+    'n_priorpa_thisgame_player_at_bat', 'age_bat', 'batter_days_since_prev_game', 'prev_batter_type_1',
+    'prev_bat_win_exp_1', 'prev_batter_type_2', 'prev_bat_win_exp_2', 'prev_batter_type_3', 'prev_bat_win_exp_3',
+    'prev_batter_type_4', 'prev_bat_win_exp_4', 'prev_batter_type_5', 'prev_bat_win_exp_5'
 ]
 
 for col in cols_to_convert:
     if df[col].map(type).eq(str).any():
         df[col] = df[col].str.extract('([0-9.-]+)', expand=False)
         df[col] = df[col].astype(float)
-df['prev_delta_run_exp_1'] = df['prev_delta_run_exp_1'].fillna(0)
-df['prev_delta_run_exp_2'] = df['prev_delta_run_exp_2'].fillna(0)
-df['prev_delta_run_exp_3'] = df['prev_delta_run_exp_3'].fillna(0)
-df['prev_delta_run_exp_4'] = df['prev_delta_run_exp_4'].fillna(0)
-df['prev_delta_run_exp_5'] = df['prev_delta_run_exp_5'].fillna(0)
+df['prev_bat_win_exp_1'] = df['prev_bat_win_exp_1'].fillna(0)
+df['prev_bat_win_exp_2'] = df['prev_bat_win_exp_2'].fillna(0)
+df['prev_bat_win_exp_3'] = df['prev_bat_win_exp_3'].fillna(0)
+df['prev_bat_win_exp_4'] = df['prev_bat_win_exp_4'].fillna(0)
+df['prev_bat_win_exp_5'] = df['prev_bat_win_exp_5'].fillna(0)
 
 df = df.dropna()
-df = df.drop(columns=['batter', 'game_pk', 'delta_run_exp'])
+df = df.drop(columns=['batter', 'game_pk', 'bat_win_exp'])
 
 
 X = df.drop(columns=['bb_type'])

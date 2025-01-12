@@ -40,7 +40,8 @@ class PitcherAgent:
         for var in ['release_speed', 'release_pos_x', 'release_pos_y', 'release_pos_z',
                     'pfx_x', 'pfx_z', 'vx0', 'vy0', 'vz0', 'ax', 'ay', 'az',
                     'effective_speed', 'release_spin_rate', 'release_extension', 'plate_x',
-                    'plate_z']:
+                    'plate_z','api_break_z_with_gravity', 'api_break_x_arm', 'api_break_x_batter_in',
+                    'arm_angle']:
             add_stats(var)
 
         # Categorical stats
@@ -101,7 +102,10 @@ class PitcherAgent:
             # Add stats for numeric variables
             for var in ['release_speed', 'release_pos_x', 'release_pos_y', 'release_pos_z',
                     'pfx_x', 'pfx_z', 'vx0', 'vy0', 'vz0', 'ax', 'ay', 'az',
-                    'effective_speed', 'release_spin_rate', 'release_extension', 'plate_x', 'plate_z']:
+                    'effective_speed', 'release_spin_rate', 'release_extension', 'plate_x', 'plate_z',
+                        'api_break_z_with_gravity', 'api_break_x_arm', 'api_break_x_batter_in',
+                        'arm_angle'
+                ]:
                 stats_dict.update(add_stats(group, var))
 
             stats_dict['B_p_throws_L'] = (group['p_throws'] == 'L').mean()
@@ -188,7 +192,7 @@ def calculate_normalized_score(mean_val, mode_val, min_val, max_val, std, alpha=
         range_val = 0.001 # consider as R^2
     return alpha * (mean_val - min_val) / range_val + beta * (mode_val - min_val) / range_val + gamma * range_val - delta * std
 
-# test
+#test
 # pitcher_agent = PitcherAgent("../data/pitcher_data/621016.csv")
 # pitcher_agent = PitcherAgent("../data/test.xlsx")
 

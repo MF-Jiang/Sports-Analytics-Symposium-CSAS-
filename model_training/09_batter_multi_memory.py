@@ -10,10 +10,10 @@ def add_previous_battes(group):
         for i in range(1, 6):
             if len(prev_rows) >= i:
                 group_data.loc[idx, f'prev_batter_type_{i}'] = prev_rows.iloc[-i]['bb_type']
-                group_data.loc[idx, f'prev_delta_run_exp_{i}'] = prev_rows.iloc[-i]['delta_run_exp']
+                group_data.loc[idx, f'prev_bat_win_exp_{i}'] = prev_rows.iloc[-i]['bat_win_exp']
             else:
                 group_data.loc[idx, f'prev_batter_type_{i}'] = 0
-                group_data.loc[idx, f'prev_delta_run_exp_{i}'] = 0.0
+                group_data.loc[idx, f'prev_bat_win_exp_{i}'] = 0.0
     print(group_data)
     return group_data
 
@@ -27,7 +27,7 @@ def parallelize_dataframe(df, func, num_workers=4):
     return pd.concat(result)
 
 if __name__ == '__main__':
-    data=pd.read_csv('../data/../data/batter_prediction_dataset/batter_prediction_dataset_V3.csv', low_memory=False)
+    data=pd.read_csv('../data/batter_prediction_dataset/batter_prediction_dataset_V3.csv', low_memory=False)
     start_time = time.time()
     data_parallelized = parallelize_dataframe(data, process_group, num_workers=8)
     end_time = time.time()

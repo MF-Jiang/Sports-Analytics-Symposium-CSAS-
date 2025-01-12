@@ -19,10 +19,31 @@ df = pd.read_csv('../data/pitcher_prediction_dataset/pitcher_prediction_dataset_
 print("Finished Loading Data")
 df = df[~df['pitch_type'].isin([15, 16])]
 cols_to_convert = [
-    'B_release_speed_level', 'B_release_pos_x_level', 'B_release_pos_y_level', 'B_release_pos_z_level',
-    'B_pfx_x_level', 'B_pfx_z_level', 'B_vx0_level', 'B_vy0_level', 'B_vz0_level', 'B_ax_level',
-    'B_ay_level', 'B_az_level', 'B_effective_speed_level', 'B_release_spin_rate_level',
-    'B_release_extension_level', 'B_plate_x_level', 'B_plate_z_level'
+    "pitch_type", "release_speed_level", "release_pos_x_level", "release_pos_y_level",
+    "release_pos_z_level", "pfx_x_level", "pfx_z_level", "vx0_level", "vy0_level",
+    "vz0_level", "ax_level", "ay_level", "az_level", "effective_speed_level",
+    "release_spin_rate_level", "release_extension_level", "plate_x_level",
+    "plate_z_level", "p_throws_L", "p_throws_R", "type_B", "type_S", "type_X",
+    "pitch_type_CH", "pitch_type_CS", "pitch_type_CU", "pitch_type_EP", "pitch_type_FA",
+    "pitch_type_FC", "pitch_type_FF", "pitch_type_FO", "pitch_type_FS", "pitch_type_KC",
+    "pitch_type_KN", "pitch_type_PO", "pitch_type_SI", "pitch_type_SL", "pitch_type_ST",
+    "pitch_type_SV", "batter", "B_release_speed_level", "B_release_pos_x_level",
+    "B_release_pos_y_level", "B_release_pos_z_level", "B_pfx_x_level", "B_pfx_z_level",
+    "B_vx0_level", "B_vy0_level", "B_vz0_level", "B_ax_level", "B_ay_level", "B_az_level",
+    "B_effective_speed_level", "B_release_spin_rate_level", "B_release_extension_level",
+    "B_plate_x_level", "B_plate_z_level", "B_p_throws_L", "B_p_throws_R", "B_type_B",
+    "B_type_S", "B_type_X", "B_pitch_type_CH", "B_pitch_type_CS", "B_pitch_type_CU",
+    "B_pitch_type_EP", "B_pitch_type_FA", "B_pitch_type_FC", "B_pitch_type_FF",
+    "B_pitch_type_FO", "B_pitch_type_FS", "B_pitch_type_KC", "B_pitch_type_KN",
+    "B_pitch_type_PO", "B_pitch_type_SI", "B_pitch_type_SL", "B_pitch_type_ST",
+    "B_pitch_type_SV", "balls", "strikes", "on_3b", "on_2b", "on_1b", "outs_when_up",
+    "inning", "inning_topbot", "home_score", "away_score", "at_bat_number",
+    "pitch_number",  "delta_pitcher_run_exp", "stand",
+    'api_break_z_with_gravity_level', 'api_break_x_arm_level', 'api_break_x_batter_in_level',
+    'arm_angle_level','B_api_break_z_with_gravity_level', 'B_api_break_x_arm_level', 'B_api_break_x_batter_in_level',
+    'B_arm_angle_level','if_fielding_alignment','of_fielding_alignment',
+    'home_score_diff', 'home_win_exp', 'age_pit', 'n_thruorder_pitcher', 'n_priorpa_thisgame_player_at_bat',
+    'age_bat', 'pitcher_days_since_prev_game'
 ]
 
 for col in cols_to_convert:
@@ -35,7 +56,7 @@ df['prev_delta_run_exp_4'] = df['prev_delta_run_exp_4'].fillna(0)
 df['prev_delta_run_exp_5'] = df['prev_delta_run_exp_5'].fillna(0)
 
 df = df.dropna()
-df = df.drop(columns=['pitcher', 'game_pk', 'delta_run_exp'])
+df = df.drop(columns=['pitcher', 'game_pk', "delta_pitcher_run_exp"])
 
 
 X = df.drop(columns=['pitch_type'])
