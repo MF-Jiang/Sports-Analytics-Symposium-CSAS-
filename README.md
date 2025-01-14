@@ -1,7 +1,7 @@
 # Modeling Baseball Pitching and Batting Dynamics: From Linear Regression to Intelligent Agent Simulation
 ## Exploring Performance Prediction and Strategy Simulation Using Statistical and Cognitive Frameworks
 
-Because of the zip size limit, we can't submit data files. I would like you to place the dataset `statcast_pitch_swing_data_20240402_20241030_with_arm_angle2.csv` provided by the contest in the data folder. And run the script one by one in numerical order, those data files not submitted will be generated gradually during the run. Some scripts will consume a long time to run, for the three model training scripts, if you don't want to run them again, I provide the `ipynb` file, you can view the training effect directly. Also, I would like you to arrange the folder and create missing folders inside the root folder as shown in the picture or in `Github`, so that you can solve the problem of reading the path of some files.
+Because of the zip size limit, we can't submit data files. I would like you to place the dataset `statcast_pitch_swing_data_20240402_20241030_with_arm_angle2.csv` provided by the contest in the data folder. And run the script one by one in numerical order (from `00_CSAS_Data.ipynb` to `13_event_prediction_model_training.py`), those data files not submitted will be generated gradually during the run. Some scripts will consume a long time to run, for the three model training scripts, if you don't want to run them again, I provide the `ipynb` file, you can view the training effect directly. Also, I would like you to arrange the folder and create missing folders inside the root folder as shown in the picture or in `Github`, so that you can solve the problem of reading the path of some files.
 
 ![root folder](./images/01.jpg)
 
