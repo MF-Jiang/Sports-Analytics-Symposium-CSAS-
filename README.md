@@ -1,8 +1,26 @@
 # Modeling Baseball Pitching and Batting Dynamics: From Linear Regression to Intelligent Agent Simulation
 ## Exploring Performance Prediction and Strategy Simulation Using Statistical and Cognitive Frameworks
 
+Because of the zip size limit, we can't submit data files. I would like you to place the dataset `statcast_pitch_swing_data_20240402_20241030_with_arm_angle2.csv` provided by the contest in the data folder. And run the script one by one in numerical order, those data files not submitted will be generated gradually during the run. Some scripts will consume a long time to run, for the three model training scripts, if you don't want to run them again, I provide the `ipynb` file, you can view the training effect directly. Also, I would like you to arrange the folder inside the folder as shown in the picture or in `Github`, so that you can solve the problem of reading the path of some files.
+
+
+
 ---
 
+## Introduction to Scripting
+1. `00_CSAS_Data.ipynb`
+2. `01_data_clearing.py` read `./data/statcast_pitch_swing_data_20240402_20241030_with_arm_angle2.csv` and removed obsolete or invalid features.
+3. `02_data_split.py` tried to split the dataset into `./data/batter_data` and `./data/pitcher_data` based on `batter` and `pitcher`.
+4. `./agent/batter_agent.py` and `./agent/pitcher_agent.py` are two agent class scripts that record the player level summarized through the player's historical data, as well as the player level performance when dealing with specific opponents.
+5. `03_generate_pitcher_agent.py` and `07_generate_batter_agent.py` created the needed agents and fill in their information based on the presence of players in the dataset. Save the new dataset to `./data/pitcher_prediction_dataset/pitcher_prediction_dataset.csv` and `./data/batter_prediction_dataset/batter_prediction_dataset.csv`.
+6. `04_pitcher_prediction_data_preprocessing.py` and `08_batter_prediction_data_preprocessing.py` hot-encoded the non-numeric elements in the dataset and assign values in order of frequency of occurrence. And the datasets were saved `./data/pitcher_prediction_dataset/pitcher_prediction_dataset_V3.csv` and `./data/batter_prediction_dataset/batter_prediction_dataset_V3.csv`.
+7. `05_pitcher_multi_memory.py` and `09_batter_multi_memory.py` added data to the agent about the type of pitch or shot and its effect in the previous rounds to achieve the effect of adding a "memory". And saved data to `./data/pitcher_prediction_dataset/pitcher_prediction_dataset_V4.csv` and `./data/batter_prediction_dataset/batter_prediction_dataset_V4.csv`.
+8. `06_pithcer_agent_model_training.py` and `10_batter_agent_model_training.py` used GridCV to find the best dimension and parameters for the prediction model. We tried to train Catboost model and MLP model and saved the best model in `model` folder. And more training details showed in `06_pithcer_agent_model_training.ipynb` and `10_batter_agent_model_training.ipynb`. 
+9. `11_event_prediction_dataset.py` collate and select features for event/des prediction and save the dataset to `./data/event_prediction_dataset/event_prediction_dataset_V3.csv`
+10. `12_event_batter_memory.py` added the relevant confidence of previous rounds to the agents involved in this part of the prediction work, to achieve the effect of simulating 'memory'. Save the dataset to `./data/event_prediction_dataset/event_prediction_dataset_V4.csv`
+11. `13_event_prediction_model_training.py` used GridCV to find the best dimensions and parameters for training the model. And we saved best model in `model` folder.
+
+---
 ## BDI Model: Belief-Desire-Intention Framework
 
 The **Belief-Desire-Intention (BDI) Model** is a theoretical framework in artificial intelligence and cognitive science, designed to describe the decision-making and behavior processes of rational agents. It is particularly suitable for multi-agent systems (MAS), enabling the development of intelligent systems that simulate human behavior.
@@ -71,19 +89,6 @@ Using the actual data recorded after the batter hits the ball, train a machine l
 
 ---
 
-## Introduction to Scripting
-1. `01_data_clearing.py` read `./data/statcast_pitch_swing_data_20240402_20241030_with_arm_angle2.csv` and removed obsolete or invalid features.
-2. `02_data_split.py` tried to split the dataset into `./data/batter_data` and `./data/pitcher_data` based on `batter` and `pitcher`.
-3. `./agent/batter_agent.py` and `./agent/pitcher_agent.py` are two agent class scripts that record the player level summarized through the player's historical data, as well as the player level performance when dealing with specific opponents.
-4. `03_generate_pitcher_agent.py` and `07_generate_batter_agent.py` created the needed agents and fill in their information based on the presence of players in the dataset. Save the new dataset to `./data/pitcher_prediction_dataset/pitcher_prediction_dataset.csv` and `./data/batter_prediction_dataset/batter_prediction_dataset.csv`.
-5. `04_pitcher_prediction_data_preprocessing.py` and `08_batter_prediction_data_preprocessing.py` hot-encoded the non-numeric elements in the dataset and assign values in order of frequency of occurrence. And the datasets were saved `./data/pitcher_prediction_dataset/pitcher_prediction_dataset_V3.csv` and `./data/batter_prediction_dataset/batter_prediction_dataset_V3.csv`.
-6. `05_pitcher_multi_memory.py` and `09_batter_multi_memory.py` added data to the agent about the type of pitch or shot and its effect in the previous rounds to achieve the effect of adding a "memory". And saved data to `./data/pitcher_prediction_dataset/pitcher_prediction_dataset_V4.csv` and `./data/batter_prediction_dataset/batter_prediction_dataset_V4.csv`.
-7. `06_pithcer_agent_model_training.py` and `10_batter_agent_model_training.py` used GridCV to find the best dimension and parameters for the prediction model. We tried to train Catboost model and MLP model and saved the best model in `model` folder. And more training details showed in `06_pithcer_agent_model_training.ipynb` and `10_batter_agent_model_training.ipynb`. 
-8. `11_event_prediction_dataset.py` collate and select features for event/des prediction and save the dataset to `./data/event_prediction_dataset/event_prediction_dataset_V3.csv`
-9. `12_event_batter_memory.py` added the relevant confidence of previous rounds to the agents involved in this part of the prediction work, to achieve the effect of simulating 'memory'. Save the dataset to `./data/event_prediction_dataset/event_prediction_dataset_V4.csv`
-10. `13_event_prediction_model_training.py` used GridCV to find the best dimensions and parameters for training the model. And we saved best model in `model` folder.
-
----
 
 ## Simulation Results
 
