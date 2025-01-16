@@ -6,7 +6,7 @@ Because of the zip size limit, we can't submit data files. I would like you to p
 
 ![root folder](./images/01.jpg)
 
-And you also need to create the folders `batter_data`, `pitcher_data`, `pitcher_prediction_dataset`, `batter_prediction_dataset`, `event_predicion_dataset` in the `data` folder as shown below.
+And you also need to create the folders `batter_data`, `pitcher_data`, `pitcher_prediction_dataset`, `batter_prediction_dataset`, `event_predicion_dataset` (just blank folders with these name) in the `data` folder as shown below.
 ![data folder](./images/02.jpg)
 
 Ensure all necessary Python packages (e.g., pandas, numpy, statsmodels, matplotlib, seaborn, sklearn, XGboost, Catboost) are installed.
