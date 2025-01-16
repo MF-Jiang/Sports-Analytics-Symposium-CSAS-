@@ -1,6 +1,7 @@
 # Modeling Baseball Pitching and Batting Dynamics: From Linear Regression to Intelligent Agent Simulation
 ## Exploring Performance Prediction and Strategy Simulation Using Statistical and Cognitive Frameworks
 
+## How to run?
 Because of the zip size limit, we can't submit data files. I would like you to place the dataset `statcast_pitch_swing_data_20240402_20241030_with_arm_angle2.csv` provided by the contest in the data folder. And run the script one by one in numerical order (from `00_CSAS_Data.ipynb` to `13_event_prediction_model_training.py`), those data files not submitted will be generated gradually during the run. Some scripts will consume a long time to run, for the three model training scripts, if you don't want to run them again, I provide the `ipynb` file, you can view the training effect directly. Also, I would like you to arrange the folder and create missing folders inside the root folder as shown in the picture or in `Github`, so that you can solve the problem of reading the path of some files.
 
 ![root folder](./images/01.jpg)
@@ -8,10 +9,11 @@ Because of the zip size limit, we can't submit data files. I would like you to p
 And you also need to create the folders `batter_data`, `pitcher_data`, `pitcher_prediction_dataset`, `batter_prediction_dataset`, `event_predicion_dataset` in the `data` folder as shown below.
 ![data folder](./images/02.jpg)
 
+Ensure all necessary Python packages (e.g., pandas, numpy, statsmodels, matplotlib, seaborn, sklearn, XGboost, Catboost) are installed.
 ---
 
 ## Introduction to Scripting
-1. `00_CSAS_Data.ipynb`
+1. `00_CSAS_Data.ipynb` conducted data preprocessing, EDA and statistical analysis, tried to use some regression models and carried out visual display.
 2. `01_data_clearing.py` read `./data/statcast_pitch_swing_data_20240402_20241030_with_arm_angle2.csv` and removed obsolete or invalid features.
 3. `02_data_split.py` tried to split the dataset into `./data/batter_data` and `./data/pitcher_data` based on `batter` and `pitcher`.
 4. `./agent/batter_agent.py` and `./agent/pitcher_agent.py` are two agent class scripts that record the player level summarized through the player's historical data, as well as the player level performance when dealing with specific opponents.
@@ -23,8 +25,97 @@ And you also need to create the folders `batter_data`, `pitcher_data`, `pitcher_
 10. `12_event_batter_memory.py` added the relevant confidence of previous rounds to the agents involved in this part of the prediction work, to achieve the effect of simulating 'memory'. Save the dataset to `./data/event_prediction_dataset/event_prediction_dataset_V4.csv`
 11. `13_event_prediction_model_training.py` used GridCV to find the best dimensions and parameters for training the model. And we saved best model in `model` folder.
 
+
+
+--- 
+## Starting from Data Analysis and Regression (`00_CSAS_Data.ipynb`)
+
+### 1. Data Preprocessing
+
+#### Data Cleaning:
+- Removed columns with all missing values.
+- Converted categorical columns to numerical representations.
+- Transformed the `game_date` column to datetime format.
+- Removed irrelevant columns (e.g., player IDs).
+
+#### Feature Engineering:
+- Created binary variables for runners on bases (`runner_on_1b`, `runner_on_2b`, `runner_on_3b`).
+- Added a `score_diff` column (batting score – fielding score).
+- Applied PCA for `release_pos_x`, `release_pos_y`, `release_pos_z` to derive a `release_pca` variable representing the comprehensive release position.
+
 ---
-## BDI Model: Belief-Desire-Intention Framework
+
+### 2. Handling Missing Data
+
+- Filled missing values in numerical variables with their median.
+- Filled missing categorical values with `"Nothing happened or Data missed."`
+
+---
+
+### 3. Exploratory Data Analysis (EDA)
+
+#### Normality Check:
+- Conducted Q-Q plots and Shapiro-Wilk tests to check the distribution of continuous variables.
+
+#### Variance Homogeneity:
+- Used Levene’s test to check homoscedasticity between groups.
+
+#### Scatter Plot Analysis:
+- Plotted scatterplots with regression lines to visualize the relationships between independent variables and `bat_speed`.
+
+#### Correlation Analysis:
+- Computed Pearson correlation coefficients and visualized them using a heatmap.
+
+---
+
+### 4. Regression Modeling
+
+#### Initial Robust Linear Regression:
+- Included categorical variables (encoded as dummy variables).
+- Conducted robust regression (OLS with HC3 standard errors).
+
+#### Significance Filtering:
+- Removed variables with p-values > 0.05 to create a refined model.
+
+#### Model Diagnostics:
+- Plotted residuals to assess normality and homoscedasticity.
+- Computed VIF (Variance Inflation Factor) to check multicollinearity.
+
+#### Box-Cox Transformation and Weighted Least Squares (WLS):
+- Applied Box-Cox transformations to continuous variables to stabilize variance.
+- Used WLS to address heteroscedasticity.
+
+---
+
+### 5. Exploration of Alternative Models
+
+- Attempted adding interaction terms to improve model fit.
+- Conducted model tuning to check for improvements in R-squared and overall diagnostics.
+
+---
+
+### 6. Visualization
+
+#### Pitch Events:
+- Created scatter and bar plots to illustrate relationships between pitch types, swing length, and `bat_speed`.
+- Created merged event categories (e.g., Hit, Out, On Base, Error, Sacrifice) for meaningful comparisons.
+
+#### Distribution Plots:
+- Plotted 3D scatter plots to visualize `release_speed` and `release_position`.
+- Stacked bar plots were used to show the distribution of resulting pitch outcomes for different pitch types.
+
+
+### Key Insights and Challenges
+
+- Normality and Heteroscedasticity Issues: Despite applying transformations and robust regression methods, residuals exhibited non-normality and unequal variances.
+
+- Multicollinearity: VIF tests confirmed no significant multicollinearity after filtering variables.
+
+- Data Visualization: Visualizations were essential to identify outliers, trends, and unexpected behaviors.
+
+
+---
+## BDI Model: Belief-Desire-Intention Framework (`01_`-`13_` Scripts)
 
 The **Belief-Desire-Intention (BDI) Model** is a theoretical framework in artificial intelligence and cognitive science, designed to describe the decision-making and behavior processes of rational agents. It is particularly suitable for multi-agent systems (MAS), enabling the development of intelligent systems that simulate human behavior.
 
